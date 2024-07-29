@@ -8,12 +8,15 @@ Faça um programa que encontra e exibe os números menores de 1000000, que são 
 e que podem ser escritos pela soma das potências de 5 de seus dígitos.
 '''
 b = 0
-resposta = ''
-for i in range(10000):
-    #if i%2 == 0 or i%4 == 0:
-    a = str(i)
-    for c in range(len(a)):
-        aux = int(a[c])
-        b += aux**4
-        if b == a:
-            print(b)
+
+for i in range(1,1000000 +1):
+    if i%2 == 0 or i%5 == 0:
+        a = str(i)
+        for c in range(len(a)): #não sei dizer porque está dando print em 4150 duas vezes
+            b += int(a[c])**5
+            if int(a) == 4150:
+                print(b)
+            if str(b) == str(a):
+                print(b)
+        b = 0
+            
