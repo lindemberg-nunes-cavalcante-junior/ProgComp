@@ -6,9 +6,13 @@ Exemplo:
 Informe um valor inteiro: 14583
 O valor informado possui 5 dígitos
 '''
+import sys
 
 numero = input('Informe um número:')
 contado = 0
+
+if numero < 0: sys.exit('Apenas números positivos')
+
 while numero[0:contado] != numero: 
         contado += 1
 print(contado)
