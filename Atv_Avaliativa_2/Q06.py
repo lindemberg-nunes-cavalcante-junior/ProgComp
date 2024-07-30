@@ -17,9 +17,8 @@ inicial = int(input('Informe o valor inicial:'))
 razao = float(input('Informe a razão da P.G.:'))
 tamanho = int(input('Informe o tamanho da P.G.:'))
 
-elementos = inicial
 PG = ''
 
-for i in range(inicial, tamanho + 2):
-    elementos = elementos * razao
+for i in range(1,tamanho):
+    elementos = i * razao
     print(elementos)
