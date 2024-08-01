@@ -17,8 +17,31 @@ inicial = int(input('Informe o valor inicial:'))
 razao = float(input('Informe a razão da P.G.:'))
 tamanho = int(input('Informe o tamanho da P.G.:'))
 
-PG = ''
+elementos = inicial
 
-for i in range(1,tamanho):
-    elementos = i * razao
-    print(elementos)
+soma = inicial * ((razao**tamanho) - 1)/razao - 1
+
+for i in range(inicial, tamanho+inicial):
+    print(elementos, end= ' ')
+    elementos = elementos * razao
+print()
+
+if razao < 0:
+    tipo = 'oscilante'
+elif razao > 0 and inicial > 0:
+    tipo = 'crescente'
+elif razao > 0 and inicial < 0:
+    tipo = 'decrescente'
+else:
+    tipo = 'constante'
+
+print(f'É do tipo {tipo}')
+print(f"A soma dos elementos é:{soma}")
+
+posicao = int(input('Digite uma posição que queira saber o valor:'))
+
+a = inicial * razao**posicao - 1
+
+print(f'O valor é {a}')
+
+        
