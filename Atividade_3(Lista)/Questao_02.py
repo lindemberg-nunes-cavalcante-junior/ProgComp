@@ -7,5 +7,14 @@ informados, seguindo a lógica abaixo:
 '''
 
 x = int(input('Informe a quantidade de elementos da lista:'))
-
 lista = list()
+n = 1
+
+while n != 0:
+    n = int(input('Informe um valor:'))
+
+    if len(lista) < n:
+        lista.append(n)
+
+    lista.sort()
+    print(lista)
