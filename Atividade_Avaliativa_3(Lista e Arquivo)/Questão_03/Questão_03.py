@@ -14,3 +14,13 @@ linha. Utilize ; para separar os valores na linha;
 d) No final deverão ser exibidos na tela quantas combinações foram geradas, e quais as probabilidades
 de se acertar a sena, a quina e a quadra.
 '''
+import sys,random
+
+x = int(input('Digite um número de 7 e 60:'))
+
+if x < 7 or x > 60:
+    sys.exit('Digite um número na faixa pedida.')
+
+lista = list(random.randint(1,60) for _ in range(x))
+
+print(lista)
