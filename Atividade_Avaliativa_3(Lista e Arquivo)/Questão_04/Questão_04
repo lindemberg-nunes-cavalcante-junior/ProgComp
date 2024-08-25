@@ -1,0 +1,38 @@
+'''
+4. (Valor: 15 pontos) Fazer um programa para gerar automaticamente uma lista (utilizar List 
+Comprehensions) de dimensão de n elementos (n deverá ser solicitado ao usuário e ser positivo), com 
+os elementos na faixa dos números inteiros entre 0 e 99 (inclusive), gerados aleatoriamente. 
+Uma vez a lista gerada, implementar as seguintes operações:
+a) A média dos valores dos elementos da lista; (feito)
+b) A mediana dos valores dos elementos da lista; (feito)
+c) A variância populacional dos valores dos elementos da lista;
+d) O desvio-padrão populacional dos valores dos elementos da lista.
+ATENÇÃO: 
+i) NÃO USAR a biblioteca statistics.py para implementar o que foi pedido anteriormente;
+ii) Para fins de conferência, o aluno poderá utilizar as funções mean(), median(), pvariance() e pstdev()
+da biblioteca statistics.py.
+'''
+import sys,random
+
+n = int(input('Insira um valor positivo:'))
+
+if n <= 0:
+    sys.exit('Insira um número positivo.')
+
+lista = [random.randint(0,100) for _ in range(n)]
+
+Media = (sum(lista))/n
+
+if n%2 != 0:
+    Mediana = lista[(n - 1)//2]
+elif n%2 == 0:
+    Mediana = (lista[n//2] + lista[(n//2)+1])/2
+
+Variancia = 0
+for i in lista:
+    Variancia += Variancia + (i - Media)**2
+Variancia = Variancia/n
+
+Desvio = Variancia**0.5
+
+print(f"A media é {Media}, a mediana é {Mediana}, a variancia é {Variancia}, o desvio é {Desvio}")

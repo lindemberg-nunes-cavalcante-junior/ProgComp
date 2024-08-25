@@ -12,7 +12,7 @@ import random
 listas = int(input('Coloque o número de listas que deseja:'))
 elementos = int(input('Coloque a quantidade de elementos que cada um terá:'))
 
-matriz = [[random.randint(0,10) for i in range(elementos) ] for i in range(listas)]
+matriz = [[random.randint(0,11) for i in range(elementos) ] for i in range(listas)]
 
 matrizT = [[i[x] for i in matriz] for x in range(elementos)]
 
