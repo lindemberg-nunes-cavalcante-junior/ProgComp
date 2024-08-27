@@ -15,16 +15,20 @@ ii)
 Deverão ser utilizadas as funções MAP(), SORT(), FILTER() e List Comprehensions quando 
 possível.
 '''
-import os
+import os,statistics
 
 dirarquivo = os.path.abspath(__file__)
 dirarquivo = os.path.dirname(dirarquivo)
 
 arqentrada = open(dirarquivo + '\\CotacoesDolar2023.csv','r',encoding='utf-8')
 
-while True:
-    lista = arqentrada.readlines()
+# listaentrada = [i[:-1].split(';') for i in arqentrada if i[-1:] == '\n']
+listaentrada = [[float(i.split(';')[5].replace(',','.')),i.split(';')[0]] for i in arqentrada]
+listaentrada.sort(key=lambda x: x[1][2:len(x)])
+meses = [['janeiro'],['Fevereiro'],['Março'],['Abril'],['Maio'], ['Junho'],['Julho'],['Agosto'],['Setembro'],['Outubro'],['Novembro'],['Dezembro']]
 
-    if lista[-1] == '\n': lista
-
-print(lista)
+for mes in range(1,13):
+    listacotas = list(filter(lambda x: int(x[1][2:4]) == mes,listaentrada))
+    
+    if len(listacotas) > 0:
+        listaMM = list(map(lambda x: [meses[mes], max(x),])) 
