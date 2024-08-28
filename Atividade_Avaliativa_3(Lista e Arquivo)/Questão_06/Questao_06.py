@@ -21,14 +21,32 @@ dirarquivo = os.path.abspath(__file__)
 dirarquivo = os.path.dirname(dirarquivo)
 
 arqentrada = open(dirarquivo + '\\CotacoesDolar2023.csv','r',encoding='utf-8')
-
-# listaentrada = [i[:-1].split(';') for i in arqentrada if i[-1:] == '\n']
 listaentrada = [[float(i.split(';')[5].replace(',','.')),i.split(';')[0]] for i in arqentrada]
+arqentrada.close()
 listaentrada.sort(key=lambda x: x[1][2:len(x)])
-meses = [['janeiro'],['Fevereiro'],['Março'],['Abril'],['Maio'], ['Junho'],['Julho'],['Agosto'],['Setembro'],['Outubro'],['Novembro'],['Dezembro']]
+meses = ['janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro']
+arqentrada = open(dirarquivo + '\\Cotações.text','w',encoding='utf-8')
+
+cotacaoMAX= list()
+cotacaoMED = list()
 
 for mes in range(1,13):
     listacotas = list(filter(lambda x: int(x[1][2:4]) == mes,listaentrada))
     
     if len(listacotas) > 0:
-        listaMM = list(map(lambda x: [meses[mes], max(x),])) 
+        Max = max(list(map(lambda x: x[0], listacotas)))
+        Media = statistics.mean(list(map(lambda x: x[0], listacotas)))
+        data = list(x[1] for x in listacotas if Max in x)
+        
+        cotacaoMAX.append([meses[mes-1], Max, data[0]])
+        cotacaoMED.append([meses[mes-1],Media])
+
+arqentrada.write('Maiores Cotações Mensais\n')
+for i in cotacaoMAX:
+    arqentrada.write(f'{i[0]} ...{i[1]} ...{i[2][0:3]}/{i[2][2:4]}/{i[2][4:len(i[2])]}\n')
+arqentrada.write('\n')
+
+arqentrada.write('Média das Cotações Mensais\n')
+for i in cotacaoMED:
+    arqentrada.write(f'{i[0]} ...{i[1]:.5f}\n')
+arqentrada.close()
