@@ -20,8 +20,9 @@ import os,statistics
 dirarquivo = os.path.abspath(__file__)
 dirarquivo = os.path.dirname(dirarquivo)
 
+# Organizando a leitura dos arquivos e iniciando os arquivos que serão escritos
 arqentrada = open(dirarquivo + '\\CotacoesDolar2024.csv','r',encoding='utf-8')
-listaentrada = [[float(i.split(';')[5].replace(',','.')),i.split(';')[0]] for i in arqentrada]
+listaentrada = [[float(i.split(';')[5].replace(',','.')),i.split(';')[0]] for i in arqentrada] # pegando as informações necessárias
 arqentrada.close()
 listaentrada.sort(key=lambda x: x[1][2:len(x)])
 meses = ['janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro']
@@ -38,9 +39,10 @@ for mes in range(1,13):
         Media = statistics.mean(list(map(lambda x: x[0], listacotas)))
         data = list(x[1] for x in listacotas if Max in x)
         
-        cotacaoMAX.append([meses[mes-1], Max, data[0]])
-        cotacaoMED.append([meses[mes-1],Media])
+        cotacaoMAX.append([meses[mes-1], Max, data[0]]) # construindo a lista das máximas
+        cotacaoMED.append([meses[mes-1],Media]) # construindo a lista das médias
 
+# Escrevendo os arquivos
 arqentrada.write('Maiores Cotações Mensais\n')
 for i in cotacaoMAX:
     arqentrada.write(f'{i[0]} ...{i[1]} ...{i[2][0:3]}/{i[2][2:4]}/{i[2][4:len(i[2])]}\n')
