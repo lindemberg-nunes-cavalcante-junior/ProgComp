@@ -25,7 +25,7 @@ listaentrada = [[float(i.split(';')[5].replace(',','.')),i.split(';')[0]] for i 
 arqentrada.close()
 listaentrada.sort(key=lambda x: x[1][2:len(x)])
 meses = ['janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro']
-arqentrada = open(dirarquivo + '\\Cotações.text','w',encoding='utf-8')
+arqentrada = open(dirarquivo + '\\Cotações2023.text','w',encoding='utf-8')
 
 cotacaoMAX= list()
 cotacaoMED = list()
