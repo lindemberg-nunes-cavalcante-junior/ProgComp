@@ -20,12 +20,12 @@ import os,statistics
 dirarquivo = os.path.abspath(__file__)
 dirarquivo = os.path.dirname(dirarquivo)
 
-arqentrada = open(dirarquivo + '\\CotacoesDolar2023.csv','r',encoding='utf-8')
+arqentrada = open(dirarquivo + '\\CotacoesDolar2024.csv','r',encoding='utf-8')
 listaentrada = [[float(i.split(';')[5].replace(',','.')),i.split(';')[0]] for i in arqentrada]
 arqentrada.close()
 listaentrada.sort(key=lambda x: x[1][2:len(x)])
 meses = ['janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro']
-arqentrada = open(dirarquivo + '\\Cotações2023.text','w',encoding='utf-8')
+arqentrada = open(dirarquivo + '\\Cotações2024.text','w',encoding='utf-8')
 
 cotacaoMAX= list()
 cotacaoMED = list()
