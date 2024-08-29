@@ -30,16 +30,38 @@ if x < 7 or x > 60:
 lista = random.sample(range(1,61), x)
 lista.sort()
 
-listaAux = [random.sample(range(1,61), x) for _ in range(60)]
-for i in listaAux:
-    i.sort()
 
 arqentrada = open(dirarquivo + '\\numeros_escolhidos.txt','w',encoding='utf-8')
 for i in lista:
     arqentrada.write(f'{i};')
 arqentrada.close()
 
+combos = [[]]
+for n in lista:
+    combos += [combinar + [n] for combinar in combos]
+for x in range(len(combos)):
+    combos[x].sort()
+
+salvarN = open(dirarquivo + '\\combinações.txt','w',encoding='utf-8')
+
+for linhas in combos:
+    for items in range(len(linhas)):
+        salvarN.write(f"{linhas[items]};")
+    salvarN.write(f"\n")
+salvarN.close()
+
+
+
+
+
+
+
+
+'''listaAux = [random.sample(range(1,61), x) for _ in range(60)]
+for i in listaAux:
+    i.sort()
+
 arqentrada = open(dirarquivo + '\\combinações.txt','w',encoding='utf-8')
 for i in listaAux:
     arqentrada.write(f'\n{i};')
-arqentrada.close()
+arqentrada.close()'''
