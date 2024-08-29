@@ -17,7 +17,7 @@ linha. Utilize ; para separar os valores na linha; (feito)
 d) No final deverão ser exibidos na tela quantas combinações foram geradas, e quais as probabilidades
 de se acertar a sena, a quina e a quadra. (falta)
 '''
-import sys,random,os
+import sys,random,os,math
 
 dirarquivo = os.path.abspath(__file__)
 dirarquivo = os.path.dirname(dirarquivo)
@@ -43,12 +43,16 @@ for x in range(len(combos)):
     combos[x].sort()
 
 salvarN = open(dirarquivo + '\\combinações.txt','w',encoding='utf-8')
+contador = 0
 
 for linhas in combos:
     for items in range(len(linhas)):
         salvarN.write(f"{linhas[items]};")
+    contador += 1
     salvarN.write(f"\n")
 salvarN.close()
+
+print(f'Foram geradas {contador} combinações e a probabilidade de acerta: Quadra = {(math.comb(len(lista),4)*math.comb(54,2))/math.comb(60,6)}, Quina = {(math.comb(len(lista),5)*math.comb(54,1))/math.comb(60,6)}, Sena = {1/math.comb(60,6)}')
 
 
 
