@@ -11,4 +11,11 @@ strURL += '@dataFinalCotacao=%2712-31-2023%27&$top=100&$format=json'
 dictCotacoes = requests.get(strURL).json() 
 
 
-print(dictCotacoes)
+
+cotacoes = [i for i in dictCotacoes['value']]
+
+moedas = [i for i in dictMoedas['value']]
+
+print(cotacoes)
+
+
