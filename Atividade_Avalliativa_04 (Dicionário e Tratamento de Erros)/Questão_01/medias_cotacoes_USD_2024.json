@@ -1,0 +1,50 @@
+{
+      "janeiro": {
+            "MediaCompra": 0.63366,
+            "MediaVenda": 0.63374
+      },
+      "Fevereiro": {
+            "MediaCompra": 0.54117,
+            "MediaVenda": 0.54123
+      },
+      "Marco": {
+            "MediaCompra": 0.58377,
+            "MediaVenda": 0.58384
+      },
+      "Abril": {
+            "MediaCompra": 0.66135,
+            "MediaVenda": 0.66143
+      },
+      "Maio": {
+            "MediaCompra": 0.63178,
+            "MediaVenda": 0.63185
+      },
+      "Junho": {
+            "MediaCompra": 0.6317,
+            "MediaVenda": 0.63177
+      },
+      "Julho": {
+            "MediaCompra": 0.74709,
+            "MediaVenda": 0.74717
+      },
+      "Agosto": {
+            "MediaCompra": 0.71597,
+            "MediaVenda": 0.71605
+      },
+      "Setembro": {
+            "MediaCompra": 0.06591,
+            "MediaVenda": 0.06592
+      },
+      "Outubro": {
+            "MediaCompra": 0,
+            "MediaVenda": 0
+      },
+      "Novembro": {
+            "MediaCompra": 0,
+            "MediaVenda": 0
+      },
+      "Dezembro": {
+            "MediaCompra": 0,
+            "MediaVenda": 0
+      }
+}
