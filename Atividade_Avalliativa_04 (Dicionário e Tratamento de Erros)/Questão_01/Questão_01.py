@@ -57,7 +57,7 @@ try:
         arqentrada.write(f'{moeda};{i};{x};{y}\n')
     arqentrada.close()
 except:
-    print(f'//ERROR {sys.exc_info()}')
+    print(f'//ERROR: {sys.exc_info()}')
 
 # QUESTÃO BÔNUS
 graf.figure(figsize=(15,6))
