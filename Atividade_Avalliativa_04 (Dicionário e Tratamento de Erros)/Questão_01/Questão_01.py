@@ -17,13 +17,12 @@ moeda = 'USD'
 moedas = list(filter(lambda x: x['simbolo'] == moeda, dictMoedas['value']))
 if len(moedas) <= 0:
     sys.exit('Moeda não existe')
-
-# ano = int(input('Digite o ano desejado: '))
-ano = 2024
-if ano > int(datetime.now().year):
-    sys.exit('Coloque um ano válido e anterior, ou igual, ao atual.')
-
 try:
+# ano = int(input('Digite o ano desejado: '))
+    ano = 2024
+    if ano > int(datetime.now().year):
+        sys.exit('Coloque um ano válido e anterior, ou igual, ao atual.')
+
     strURL = 'https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/'
     strURL += 'CotacaoMoedaPeriodo(moeda=@moeda,dataInicial='
     strURL += '@dataInicial,dataFinalCotacao=@dataFinalCotacao)?'
@@ -31,7 +30,7 @@ try:
     strURL += f'@dataFinalCotacao=%2712-31-{ano}%27&$format=json'
     dictCotacoes = requests.get(strURL).json()
 except:
-    print(sys.exc_info())
+    print(f'//ERROR: {sys.exc_info()}')
 
 meses = ['janeiro','Fevereiro','Marco','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro']
 
@@ -43,20 +42,22 @@ Medias = {value: {'MediaCompra':round((statistics.mean([x[0] if x[2].month == me
 # Salvando os arquivos
 direntrada = os.path.abspath(__file__)
 direntrada = os.path.dirname(direntrada)
+try:
+    # JSON
+    arqentrada = open(direntrada + f'\\medias_cotacoes_{moeda}_{ano}.json','w',encoding='utf-8')
+    json.dump(Medias,arqentrada,indent=6)
+    arqentrada.close()
 
-# JSON
-arqentrada = open(direntrada + f'\\medias_cotacoes_{moeda}_{ano}.json','w',encoding='utf-8')
-json.dump(Medias,arqentrada,indent=6)
-arqentrada.close()
-
-#CVC
-arqentrada = open(direntrada + f'\\medias_cotacoes_{moeda}_{ano}.cvs','w',encoding='utf-8')
-arqentrada.write('moeda;mes;mediaCompra;mediaVenda;\n')
-for i in Medias.keys():
-    x = Medias[i]['MediaCompra']
-    y = Medias[i]['MediaVenda']
-    arqentrada.write(f'{moeda};{i};{x};{y}\n')
-arqentrada.close()
+    #CVC
+    arqentrada = open(direntrada + f'\\medias_cotacoes_{moeda}_{ano}.cvs','w',encoding='utf-8')
+    arqentrada.write('moeda;mes;mediaCompra;mediaVenda;\n')
+    for i in Medias.keys():
+        x = Medias[i]['MediaCompra']
+        y = Medias[i]['MediaVenda']
+        arqentrada.write(f'{moeda};{i};{x};{y}\n')
+    arqentrada.close()
+except:
+    print(f'//ERROR {sys.exc_info()}')
 
 
 
