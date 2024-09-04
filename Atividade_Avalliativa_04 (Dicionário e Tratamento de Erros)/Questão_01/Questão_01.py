@@ -1,4 +1,5 @@
 import requests,sys,statistics,json,os
+import matplotlib.pyplot as graf
 from datetime import datetime
 
 try:
@@ -8,18 +9,17 @@ try:
 except:
     print(f'/ERROR: {sys.exc_info()}') 
 
-
-for i in dictMoedas['value']:
-    x = i['simbolo']
-    print(f'{x}')
-# moeda = input(f'Digite a moeda escolhida: ')
-moeda = 'USD'
-moedas = list(filter(lambda x: x['simbolo'] == moeda, dictMoedas['value']))
-if len(moedas) <= 0:
-    sys.exit('Moeda não existe')
 try:
-# ano = int(input('Digite o ano desejado: '))
-    ano = 2024
+    for i in dictMoedas['value']:
+        x = i['simbolo']
+        print(f'{x}')
+    moeda = input(f'Digite a moeda escolhida: ').upper()
+    moedas = list(filter(lambda x: x['simbolo'] == moeda, dictMoedas['value']))
+    if len(moedas) <= 0:
+        sys.exit('Moeda não existe')
+
+
+    ano = int(input('Digite o ano desejado: '))
     if ano > int(datetime.now().year):
         sys.exit('Coloque um ano válido e anterior, ou igual, ao atual.')
 
@@ -58,6 +58,14 @@ try:
     arqentrada.close()
 except:
     print(f'//ERROR {sys.exc_info()}')
+
+# QUESTÃO BÔNUS
+graf.figure(figsize=(15,6))
+graf.plot(Medias.keys(), list(v['MediaCompra'] for v in Medias.values()), label='MediaCompra',color='Red')
+graf.plot(Medias.keys(), list(v['MediaVenda'] for v in Medias.values()), label='MediaVenda',color='Green')
+graf.title(f'Média Cotações {moeda} – Ano {ano}')
+graf.legend()
+graf.show()
 
 
 
