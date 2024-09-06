@@ -9,14 +9,24 @@ Ano_Atual = datetime.now().year
 # Ano = input('Digite o ano desejado: ')
 Ano = 2024
 
-print(dictCartola['atletas'][1]['posicao_id'])
+
 if int(Ano) > Ano_Atual:
     sys.exit('Você não prevê o futuro.')
 # x['apelido'],x['Apelido_abreviado'],x[['jogos_num']],x['media_num']
-jogadores = [dictCartola['atletas']]
+jogadores = [x for x in dictCartola['atletas']]
+posicoes = [dictCartola['posicoes'][i] for i in dictCartola['posicoes']]
 #jogadores = {value: {dictCartola[dictCartola['atletas'][value]['posicao_id']]:{'AtletaID':atleta_id, 'Nome': nome, 'Apelido': apelido, 'Foto': foto, 'Clube': clube, 'ID_Posicao':ID_Posicao, 'Posicao': Posicao, 'Pontuacao': Pontuacao }} for value in zip(dictCartola['atletas']['atleta_id'])}
-jogadores = {atleta_id: {dictCartola['posicoes']['1']['nome']:{'AtletaID':atleta_id }}  for atleta_id in dictCartola['atletas']['atleta_id']}
+# jogadores = {atleta_id: {dictCartola['posicoes']['1']['nome']:{'AtletaID':atleta_id }}  for atleta_id in dictCartola['atletas']['atleta_id']}
 # dictCartola['atletas'][1]['posicao_id']
-print(jogadores)
+for i in jogadores:
+    print(f'{i}\n')
+
+
+
+
+
+
+
+
 
 
