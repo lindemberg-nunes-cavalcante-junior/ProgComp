@@ -12,24 +12,57 @@ Ano = 2024
 if int(Ano) > Ano_Atual:
     sys.exit('Você não prevê o futuro.')
 
-print('Escolhe o esquema tático entre: 3-4-3, 3-5-2, 4-3-3, 4-4-2, 4-5-1, 5-3-2 ou 5-4-1')
-esquema = input()
+esquema = input('Escolhe o esquema tático entre: 3-4-3, 3-5-2, 4-3-3, 4-4-2, 4-5-1, 5-3-2 ou 5-4-1: ')
 
 jogadores = [x for x in dictCartola['atletas']]
 posicoes = [dictCartola['posicoes'][i] for i in dictCartola['posicoes']]
 clubes = [x for x in dictCartola['clubes']]
 
 
-jogadores = {value['atleta_id']:{value['atleta_id']:{'Atleta_id':value['atleta_id'],'Nome':value['nome'], 'Apelido':value['apelido'], 'Foto':value['foto'], 'Clube':dictCartola['clubes'][str(value['clube_id'])]['nome'], 'Posicao':dictCartola['posicoes'][str(value['posicao_id'])]['nome'], 'Pontuacao':(value['media_num']*value['jogos_num'])}} for value in jogadores}
+jogadores = {value['atleta_id']:{value['atleta_id']:{'Atleta_id':value['atleta_id'],'Nome':value['nome'], 'Apelido':value['apelido'], 'Foto':[value['foto'] if value['foto'] != '' or None else None][0], 'Clube':dictCartola['clubes'][str(value['clube_id'])]['nome'], 'Posicao':dictCartola['posicoes'][str(value['posicao_id'])]['nome'], 'Pontuacao':(value['media_num']*value['jogos_num'])}} for value in jogadores}
+
+# Concertando as fotos
+for i in jogadores.keys():
+    if jogadores[i][i]['Foto'] != None and jogadores[i][i]['Foto'].find('photo_Formato_'):
+        jogadores[i][i]['Foto'] = jogadores[i][i]['Foto'].replace('photo_FORMATO_','photo_220x220_')
+    elif jogadores[i][i]['Foto'] != None and jogadores[i][i]['Foto'].find('_Formato.'):
+        jogadores[i][i]['Foto'] = jogadores[i][i]['Foto'].replace('_FORMATO.','_220x220.')
+
 Zagueiros = [jogadores[i][i] for i in jogadores.keys() if jogadores[i][i]['Posicao'] == 'Zagueiro']
 Laterais = [jogadores[i][i] for i in jogadores.keys() if jogadores[i][i]['Posicao'] == 'Lateral']
 Meias = [jogadores[i][i] for i in jogadores.keys() if jogadores[i][i]['Posicao'] == 'Meia']
 Atacantes = [jogadores[i][i] for i in jogadores.keys() if jogadores[i][i]['Posicao'] == 'Atacante']
 Tecnicos = [jogadores[i][i] for i in jogadores.keys() if jogadores[i][i]['Posicao'] == 'Técnico']
 Goleiros = [jogadores[i][i] for i in jogadores.keys() if jogadores[i][i]['Posicao'] == 'Goleiro']
-
 tecnico = [i for i in Tecnicos if i['Pontuacao'] == max(x['Pontuacao'] for x in Tecnicos)][0]
 goleiro = [i for i in Goleiros if i['Pontuacao'] == max(x['Pontuacao'] for x in Goleiros)][0]
+
+'''    Zagueiro = []
+    for  _ in range(1,3):
+        x = [i for i in Zagueiros if i['Pontuacao'] == max(x['Pontuacao'] for x in Zagueiros)]
+        if x[0] not in Zagueiro:
+            Zagueiro.append(x[0])
+            Zagueiros.remove(x[0])
+    Lateral = []
+    for  _ in range(1,3):
+        x = [i for i in Laterais if i['Pontuacao'] == max(x['Pontuacao'] for x in Laterais)]
+        if x[0] not in Lateral:
+            Lateral.append(x[0])
+            Laterais.remove(x[0])
+    Meia = []
+    for  _ in range(1,4):
+        x = [i for i in Meias if i['Pontuacao'] == max(x['Pontuacao'] for x in Meias)]
+        if x[0] not in Meia:
+            Meia.append(x[0])
+            Meias.remove(x[0])
+    Atacante = []
+    for  _ in range(1,4):
+        x = [i for i in Atacantes if i['Pontuacao'] == max(x['Pontuacao'] for x in Atacantes)]
+        if x[0] not in Atacante:
+            Atacante.append(x[0])
+            Atacantes.remove(x[0])
+    esquema = {'Esquema':{'Tecnico': tecnico, 'Goleiro': goleiro,'Zagueiros':Zagueiro, 'Laterais':Lateral, 'Meias':Meia, 'Atacantes':Atacante}}'''
+
 #Organizando o Esquema Tático
 if esquema == '3-4-3':
     Zagueiro = []
