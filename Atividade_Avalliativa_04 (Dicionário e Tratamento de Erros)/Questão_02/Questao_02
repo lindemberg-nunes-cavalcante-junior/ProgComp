@@ -1,24 +1,35 @@
-import requests,sys
+import requests,os,json
+from Funcoes_Questao_02 import Funcoes
 from datetime import datetime
 
 strURL = 'https://api.cartolafc.globo.com/atletas/mercado'
 dictCartola = requests.get(strURL).json()
+dirarquivo = os.path.abspath(__file__)
+dirarquivo = os.path.dirname(dirarquivo)
 
 Ano_Atual = datetime.now().year
 
-# Ano = input('Digite o ano desejado: ')
-Ano = 2024
+while True:
+    Ano = input('Digite o ano desejado(2021,2022,2023,2024): ')
+    if Ano == '2023' or Ano == '2021' or Ano == '2022':
+        x = open(dirarquivo + f'\\Arquivos\cartola_fc_{Ano}.json','r', encoding='utf-8')
+        dictCartola = json.load(x)
+        x.close()
+        break
+    elif int(Ano) > Ano_Atual:
+        print('Você não prevê o futuro.')
+    elif int(Ano) < 2021:
+        print('GREAT SCOTT!!!(Necessita ser acima ser 2021 para cima)')
+    else: break
 
-if int(Ano) > Ano_Atual:
-    sys.exit('Você não prevê o futuro.')
+esquema = input('Escolhe o esquema tático entre: 3-4-3, 3-5-2, 4-3-3, 4-4-2, 4-5-1, 5-3-2 ou 5-4-1: ').split('-')
 
-esquema = input('Escolhe o esquema tático entre: 3-4-3, 3-5-2, 4-3-3, 4-4-2, 4-5-1, 5-3-2 ou 5-4-1: ')
-
+# Organizando os dados do dictCartola
 jogadores = [x for x in dictCartola['atletas']]
 posicoes = [dictCartola['posicoes'][i] for i in dictCartola['posicoes']]
 clubes = [x for x in dictCartola['clubes']]
 
-
+# Organizando os jogadores
 jogadores = {value['atleta_id']:{value['atleta_id']:{'Atleta_id':value['atleta_id'],'Nome':value['nome'], 'Apelido':value['apelido'], 'Foto':[value['foto'] if value['foto'] != '' or None else None][0], 'Clube':dictCartola['clubes'][str(value['clube_id'])]['nome'], 'Posicao':dictCartola['posicoes'][str(value['posicao_id'])]['nome'], 'Pontuacao':(value['media_num']*value['jogos_num'])}} for value in jogadores}
 
 # Concertando as fotos
@@ -28,218 +39,10 @@ for i in jogadores.keys():
     elif jogadores[i][i]['Foto'] != None and jogadores[i][i]['Foto'].find('_Formato.'):
         jogadores[i][i]['Foto'] = jogadores[i][i]['Foto'].replace('_FORMATO.','_220x220.')
 
-Zagueiros = [jogadores[i][i] for i in jogadores.keys() if jogadores[i][i]['Posicao'] == 'Zagueiro']
-Laterais = [jogadores[i][i] for i in jogadores.keys() if jogadores[i][i]['Posicao'] == 'Lateral']
-Meias = [jogadores[i][i] for i in jogadores.keys() if jogadores[i][i]['Posicao'] == 'Meia']
-Atacantes = [jogadores[i][i] for i in jogadores.keys() if jogadores[i][i]['Posicao'] == 'Atacante']
-Tecnicos = [jogadores[i][i] for i in jogadores.keys() if jogadores[i][i]['Posicao'] == 'Técnico']
-Goleiros = [jogadores[i][i] for i in jogadores.keys() if jogadores[i][i]['Posicao'] == 'Goleiro']
-tecnico = [i for i in Tecnicos if i['Pontuacao'] == max(x['Pontuacao'] for x in Tecnicos)][0]
-goleiro = [i for i in Goleiros if i['Pontuacao'] == max(x['Pontuacao'] for x in Goleiros)][0]
+# Montando a esquemática
+esquema = Funcoes.Esquema(esquema,jogadores)
 
-'''    Zagueiro = []
-    for  _ in range(1,3):
-        x = [i for i in Zagueiros if i['Pontuacao'] == max(x['Pontuacao'] for x in Zagueiros)]
-        if x[0] not in Zagueiro:
-            Zagueiro.append(x[0])
-            Zagueiros.remove(x[0])
-    Lateral = []
-    for  _ in range(1,3):
-        x = [i for i in Laterais if i['Pontuacao'] == max(x['Pontuacao'] for x in Laterais)]
-        if x[0] not in Lateral:
-            Lateral.append(x[0])
-            Laterais.remove(x[0])
-    Meia = []
-    for  _ in range(1,4):
-        x = [i for i in Meias if i['Pontuacao'] == max(x['Pontuacao'] for x in Meias)]
-        if x[0] not in Meia:
-            Meia.append(x[0])
-            Meias.remove(x[0])
-    Atacante = []
-    for  _ in range(1,4):
-        x = [i for i in Atacantes if i['Pontuacao'] == max(x['Pontuacao'] for x in Atacantes)]
-        if x[0] not in Atacante:
-            Atacante.append(x[0])
-            Atacantes.remove(x[0])
-    esquema = {'Esquema':{'Tecnico': tecnico, 'Goleiro': goleiro,'Zagueiros':Zagueiro, 'Laterais':Lateral, 'Meias':Meia, 'Atacantes':Atacante}}'''
-
-#Organizando o Esquema Tático
-if esquema == '3-4-3':
-    Zagueiro = []
-    for  _ in range(1,4):
-        x = [i for i in Zagueiros if i['Pontuacao'] == max(x['Pontuacao'] for x in Zagueiros)]
-        if x[0] not in Zagueiro:
-            Zagueiro.append(x[0])
-            Zagueiros.remove(x[0])
-    Meia = []
-    for  _ in range(1,5):
-        x = [i for i in Meias if i['Pontuacao'] == max(x['Pontuacao'] for x in Meias)]
-        if x[0] not in Meia:
-            Meia.append(x[0])
-            Meias.remove(x[0])
-    Atacante = []
-    for  _ in range(1,4):
-        x = [i for i in Atacantes if i['Pontuacao'] == max(x['Pontuacao'] for x in Atacantes)]
-        if x[0] not in Atacante:
-            Atacante.append(x[0])
-            Atacantes.remove(x[0])
-    esquema = {'Esquema':{'Tecnico': tecnico, 'Goleiro': goleiro, 'Zagueiros':Zagueiro, 'Laterais': 0, 'Meias':Meia, 'Atacantes':Atacante}}
-    
-elif esquema == '3-5-2':
-    Zagueiro = []
-    for  _ in range(1,4):
-        x = [i for i in Zagueiros if i['Pontuacao'] == max(x['Pontuacao'] for x in Zagueiros)]
-        if x[0] not in Zagueiro:
-            Zagueiro.append(x[0])
-            Zagueiros.remove(x[0])
-    Meia = []
-    for  _ in range(1,6):
-        x = [i for i in Meias if i['Pontuacao'] == max(x['Pontuacao'] for x in Meias)]
-        if x[0] not in Meia:
-            Meia.append(x[0])
-            Meias.remove(x[0])
-    Atacante = []
-    for  _ in range(1,3):
-        x = [i for i in Atacantes if i['Pontuacao'] == max(x['Pontuacao'] for x in Atacantes)]
-        if x[0] not in Atacante:
-            Atacante.append(x[0])
-            Atacantes.remove(x[0])
-    esquema = {'Esquema':{'Tecnico': tecnico, 'Goleiro': goleiro,'Zagueiros':Zagueiro, 'Laterais': 0, 'Meias':Meia, 'Atacantes':Atacante}}
-
-elif esquema == '4-3-3':
-    Zagueiro = []
-    for  _ in range(1,3):
-        x = [i for i in Zagueiros if i['Pontuacao'] == max(x['Pontuacao'] for x in Zagueiros)]
-        if x[0] not in Zagueiro:
-            Zagueiro.append(x[0])
-            Zagueiros.remove(x[0])
-    Lateral = []
-    for  _ in range(1,3):
-        x = [i for i in Laterais if i['Pontuacao'] == max(x['Pontuacao'] for x in Laterais)]
-        if x[0] not in Lateral:
-            Lateral.append(x[0])
-            Laterais.remove(x[0])
-    Meia = []
-    for  _ in range(1,4):
-        x = [i for i in Meias if i['Pontuacao'] == max(x['Pontuacao'] for x in Meias)]
-        if x[0] not in Meia:
-            Meia.append(x[0])
-            Meias.remove(x[0])
-    Atacante = []
-    for  _ in range(1,4):
-        x = [i for i in Atacantes if i['Pontuacao'] == max(x['Pontuacao'] for x in Atacantes)]
-        if x[0] not in Atacante:
-            Atacante.append(x[0])
-            Atacantes.remove(x[0])
-    esquema = {'Esquema':{'Tecnico': tecnico, 'Goleiro': goleiro,'Zagueiros':Zagueiro, 'Laterais':Lateral, 'Meias':Meia, 'Atacantes':Atacante}}
-
-elif esquema == '4-4-2':
-    Zagueiro = []
-    for  _ in range(1,3):
-        x = [i for i in Zagueiros if i['Pontuacao'] == max(x['Pontuacao'] for x in Zagueiros)]
-        if x[0] not in Zagueiro:
-            Zagueiro.append(x[0])
-            Zagueiros.remove(x[0])
-    Lateral = []
-    for  _ in range(1,3):
-        x = [i for i in Laterais if i['Pontuacao'] == max(x['Pontuacao'] for x in Laterais)]
-        if x[0] not in Lateral:
-            Lateral.append(x[0])
-            Laterais.remove(x[0])
-    Meia = []
-    for  _ in range(1,5):
-        x = [i for i in Meias if i['Pontuacao'] == max(x['Pontuacao'] for x in Meias)]
-        if x[0] not in Meia:
-            Meia.append(x[0])
-            Meias.remove(x[0])
-    Atacante = []
-    for  _ in range(1,3):
-        x = [i for i in Atacantes if i['Pontuacao'] == max(x['Pontuacao'] for x in Atacantes)]
-        if x[0] not in Atacante:
-            Atacante.append(x[0])
-            Atacantes.remove(x[0])
-    esquema = {'Esquema':{'Tecnico': tecnico, 'Goleiro': goleiro,'Zagueiros':Zagueiro, 'Laterais':Lateral, 'Meias':Meia, 'Atacantes':Atacante}}
-
-elif esquema == '4-5-1':
-    Zagueiro = []
-    for  _ in range(1,3):
-        x = [i for i in Zagueiros if i['Pontuacao'] == max(x['Pontuacao'] for x in Zagueiros)]
-        if x[0] not in Zagueiro:
-            Zagueiro.append(x[0])
-            Zagueiros.remove(x[0])
-    Lateral = []
-    for  _ in range(1,3):
-        x = [i for i in Laterais if i['Pontuacao'] == max(x['Pontuacao'] for x in Laterais)]
-        if x[0] not in Lateral:
-            Lateral.append(x[0])
-            Laterais.remove(x[0])
-    Meia = []
-    for  _ in range(1,6):
-        x = [i for i in Meias if i['Pontuacao'] == max(x['Pontuacao'] for x in Meias)]
-        if x[0] not in Meia:
-            Meia.append(x[0])
-            Meias.remove(x[0])
-    Atacante = []
-    for  _ in range(1,2):
-        x = [i for i in Atacantes if i['Pontuacao'] == max(x['Pontuacao'] for x in Atacantes)]
-        if x[0] not in Atacante:
-            Atacante.append(x[0])
-            Atacantes.remove(x[0])
-    esquema = {'Esquema':{'Tecnico': tecnico, 'Goleiro': goleiro,'Zagueiros':Zagueiro, 'Laterais':Lateral, 'Meias':Meia, 'Atacantes':Atacante}}
-
-elif esquema == '5-3-2':
-    Zagueiro = []
-    for  _ in range(1,4):
-        x = [i for i in Zagueiros if i['Pontuacao'] == max(x['Pontuacao'] for x in Zagueiros)]
-        if x[0] not in Zagueiro:
-            Zagueiro.append(x[0])
-            Zagueiros.remove(x[0])
-    Lateral = []
-    for  _ in range(1,3):
-        x = [i for i in Laterais if i['Pontuacao'] == max(x['Pontuacao'] for x in Laterais)]
-        if x[0] not in Lateral:
-            Lateral.append(x[0])
-            Laterais.remove(x[0])
-    Meia = []
-    for  _ in range(1,4):
-        x = [i for i in Meias if i['Pontuacao'] == max(x['Pontuacao'] for x in Meias)]
-        if x[0] not in Meia:
-            Meia.append(x[0])
-            Meias.remove(x[0])
-    Atacante = []
-    for  _ in range(1,3):
-        x = [i for i in Atacantes if i['Pontuacao'] == max(x['Pontuacao'] for x in Atacantes)]
-        if x[0] not in Atacante:
-            Atacante.append(x[0])
-            Atacantes.remove(x[0])
-    esquema = {'Esquema':{'Tecnico': tecnico, 'Goleiro': goleiro,'Zagueiros':Zagueiro, 'Laterais':Lateral, 'Meias':Meia, 'Atacantes':Atacante}}
-elif esquema == '5-4-1':
-    Zagueiro = []
-    for  _ in range(1,4):
-        x = [i for i in Zagueiros if i['Pontuacao'] == max(x['Pontuacao'] for x in Zagueiros)]
-        if x[0] not in Zagueiro:
-            Zagueiro.append(x[0])
-            Zagueiros.remove(x[0])
-    Lateral = []
-    for  _ in range(1,3):
-        x = [i for i in Laterais if i['Pontuacao'] == max(x['Pontuacao'] for x in Laterais)]
-        if x[0] not in Lateral:
-            Lateral.append(x[0])
-            Laterais.remove(x[0])
-    Meia = []
-    for  _ in range(1,5):
-        x = [i for i in Meias if i['Pontuacao'] == max(x['Pontuacao'] for x in Meias)]
-        if x[0] not in Meia:
-            Meia.append(x[0])
-            Meias.remove(x[0])
-    Atacante = []
-    for  _ in range(1,2):
-        x = [i for i in Atacantes if i['Pontuacao'] == max(x['Pontuacao'] for x in Atacantes)]
-        if x[0] not in Atacante:
-            Atacante.append(x[0])
-            Atacantes.remove(x[0])
-    esquema = {'Esquema':{'Tecnico': tecnico, 'Goleiro': goleiro,'Zagueiros':Zagueiro, 'Laterais':Lateral, 'Meias':Meia, 'Atacantes':Atacante}}
-
+# Apresentando o esquema
 print('------------------------------------------')
 print('Goleiro(s):')
 print(' Nome:' + esquema['Esquema']['Goleiro']['Nome'])
