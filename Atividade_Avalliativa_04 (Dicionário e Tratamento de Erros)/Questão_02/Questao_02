@@ -1,4 +1,4 @@
-import requests,os,json
+import requests,os,json,sys
 from Funcoes_Questao_02 import Funcoes
 from datetime import datetime
 
@@ -10,37 +10,64 @@ dirarquivo = os.path.dirname(dirarquivo)
 Ano_Atual = datetime.now().year
 
 while True:
-    Ano = input('Digite o ano desejado(2021,2022,2023,2024): ')
-    if Ano == '2023' or Ano == '2021' or Ano == '2022':
-        x = open(dirarquivo + f'\\Arquivos\cartola_fc_{Ano}.json','r', encoding='utf-8')
-        dictCartola = json.load(x)
-        x.close()
-        break
-    elif int(Ano) > Ano_Atual:
-        print('Você não prevê o futuro.')
-    elif int(Ano) < 2021:
-        print('GREAT SCOTT!!!(Necessita ser acima ser 2021 para cima)')
-    else: break
-
-esquema = input('Escolhe o esquema tático entre: 3-4-3, 3-5-2, 4-3-3, 4-4-2, 4-5-1, 5-3-2 ou 5-4-1: ').split('-')
+    try:
+        Ano = input('Digite o ano desejado(2021,2022,2023,2024): ')
+        if Ano == '2023' or Ano == '2021' or Ano == '2022':
+            x = open(dirarquivo + rf'\Arquivos\cartola_fc_{Ano}.json','r', encoding='UTF-8')
+            dictCartola = json.load(x)
+            x.close()
+            break
+        elif int(Ano) > Ano_Atual:
+            print('Você não prevê o futuro.')
+        elif int(Ano) < 2021:
+            print('GREAT SCOTT!!!(Necessita ser acima ser 2021 para cima)')
+        else: break
+    except ValueError:
+        print('Digite um valor válido.')
+    except:
+        print(f'\\ERRO: {sys.exc_info()[0]}')
 
 # Organizando os dados do dictCartola
 jogadores = [x for x in dictCartola['atletas']]
 posicoes = [dictCartola['posicoes'][i] for i in dictCartola['posicoes']]
 clubes = [x for x in dictCartola['clubes']]
 
+while True:
+    try:
+        esquema = input('Escolhe o esquema tático entre: 3-4-3, 3-5-2, 4-3-3, 4-4-2, 4-5-1, 5-3-2 ou 5-4-1: ').split('-')
+    except KeyboardInterrupt:
+        print('CRTL+C pressionado, saindo do programa...')
+        os.system('pause')
+        sys.exit()
+    except:
+        print(f'\\ERRO: {sys.exc_info()[0]}')
+    if esquema[0].isdigit() == False or esquema[1].isdigit() == False or esquema[2].isdigit() == False:
+         print('Digite os valores de seu esquema....')
+    else: break
+    
 # Organizando os jogadores
 jogadores = {value['atleta_id']:{value['atleta_id']:{'Atleta_id':value['atleta_id'],'Nome':value['nome'], 'Apelido':value['apelido'], 'Foto':[value['foto'] if value['foto'] != '' or None else None][0], 'Clube':dictCartola['clubes'][str(value['clube_id'])]['nome'], 'Posicao':dictCartola['posicoes'][str(value['posicao_id'])]['nome'], 'Pontuacao':(value['media_num']*value['jogos_num'])}} for value in jogadores}
 
 # Concertando as fotos
 for i in jogadores.keys():
     if jogadores[i][i]['Foto'] != None and jogadores[i][i]['Foto'].find('photo_Formato_'):
-        jogadores[i][i]['Foto'] = jogadores[i][i]['Foto'].replace('photo_FORMATO_','photo_220x220_')
-    elif jogadores[i][i]['Foto'] != None and jogadores[i][i]['Foto'].find('_Formato.'):
-        jogadores[i][i]['Foto'] = jogadores[i][i]['Foto'].replace('_FORMATO.','_220x220.')
+                jogadores[i][i]['Foto'] = jogadores[i][i]['Foto'].replace('photo_FORMATO_','photo_220x220_')
+for i in jogadores.keys():
+    if jogadores[i][i]['Foto'] != None and jogadores[i][i]['Foto'].find('_Formato.'):
+                jogadores[i][i]['Foto'] = jogadores[i][i]['Foto'].replace('_FORMATO.','_220x220.')
+            
+try:
+    # Montando a esquemática, foi em função para não poluir tanto o código
+    esquema = Funcoes.Esquema(esquema,jogadores)
+except:
+    print(f'\\ERROR: {sys.exc_info()[1]}')
 
-# Montando a esquemática
-esquema = Funcoes.Esquema(esquema,jogadores)
+try:
+    arqentrada = open(dirarquivo + f'\\CartolaFC_{Ano}.json','w',encoding='utf-8')
+    json.dump(jogadores,arqentrada,indent=6,ensure_ascii=False)
+    arqentrada.close()
+except:
+     print(f'\\ERROR: {sys.exc_info()[0]}')
 
 # Apresentando o esquema
 print('------------------------------------------')

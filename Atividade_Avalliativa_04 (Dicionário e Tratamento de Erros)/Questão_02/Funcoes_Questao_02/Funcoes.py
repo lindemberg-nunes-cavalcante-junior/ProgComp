@@ -1,13 +1,21 @@
-def Esquema(Lista:list,jogadores:dict):
+def Esquema(Lista:list,jogadores:dict): # recebendo os parâmetros
+
+    if len(Lista) < 3 or len(Lista) > 3:
+        raise Exception('Informe um esquema válido e de correta formatação...')
+    elif Lista[0].isdigit() == False or Lista[1].isdigit() == False or Lista[2].isdigit() == False:
+        raise Exception('Digite os números de seu esquema...')
+
+    # Separando os jogadores por suas posições
     Zagueiros = [jogadores[i][i] for i in jogadores.keys() if jogadores[i][i]['Posicao'] == 'Zagueiro']
     Laterais = [jogadores[i][i] for i in jogadores.keys() if jogadores[i][i]['Posicao'] == 'Lateral']
     Meias = [jogadores[i][i] for i in jogadores.keys() if jogadores[i][i]['Posicao'] == 'Meia']
     Atacantes = [jogadores[i][i] for i in jogadores.keys() if jogadores[i][i]['Posicao'] == 'Atacante']
-    Tecnicos = [jogadores[i][i] for i in jogadores.keys() if jogadores[i][i]['Posicao'] == 'Técnico']
+    Tecnicos = [jogadores[i][i] for i in jogadores.keys() if jogadores[i][i]['Posicao'] == 'Técnico' or 'T�cnico']
     Goleiros = [jogadores[i][i] for i in jogadores.keys() if jogadores[i][i]['Posicao'] == 'Goleiro']
     tecnico = [i for i in Tecnicos if i['Pontuacao'] == max(x['Pontuacao'] for x in Tecnicos)][0]
     goleiro = [i for i in Goleiros if i['Pontuacao'] == max(x['Pontuacao'] for x in Goleiros)][0]
-
+    
+    # criando totalmente a esquemática
     if Lista[0] == '4':
         Zagueiro = []
         for  _ in range(1,3):
