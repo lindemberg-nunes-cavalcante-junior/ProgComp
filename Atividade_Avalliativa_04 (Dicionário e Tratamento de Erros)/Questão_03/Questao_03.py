@@ -13,10 +13,16 @@ while True:
     if valor == 1:
         quantidade = int(input('Quantas cartelas serão geradas? '))
         dictCartelas = Funcoes03.Cartelas(quantidade)
+        dictCartelas = dictCartelas[1]
+        print(dictCartelas)
     elif valor == 2:
         print(Funcoes03.SalvarC(dictCartelas))
     elif valor == 3:
-        print()
+        dictCartelas = Funcoes03.Ler()[1]
+        for i in dictCartelas:
+            print(f'Cartela {i}: {dictCartelas[i]}')
     elif valor == 4:
-        print()
+        Id = input('Número de Identificação da Cartela: ')
+        Id = Funcoes03.Imprimir(Id)
+        print(Id) 
     elif valor == 5: break
